@@ -1,6 +1,5 @@
 import time
 import uuid
-from binascii import hexlify
 from collections import deque
 from datetime import datetime
 from itertools import islice
@@ -8,7 +7,7 @@ from typing import Union
 
 import requests
 import structlog
-from eth_utils import to_checksum_address
+from eth_utils import encode_hex, to_checksum_address
 from requests.adapters import HTTPAdapter
 from web3.gas_strategies.time_based import fast_gas_price_strategy, medium_gas_price_strategy
 
@@ -79,7 +78,7 @@ def wait_for_txs(client, txhashes, timeout=360):
             time.sleep(.1)
         time.sleep(.5)
     if len(txhashes):
-        txhashes_str = ', '.join(hexlify(txhash).decode() for txhash in txhashes)
+        txhashes_str = ', '.join(encode_hex(txhash) for txhash in txhashes)
         raise ScenarioTxError(
             f"Timeout waiting for txhashes: {txhashes_str}",
         )
