@@ -1,11 +1,10 @@
 import copy
 import os
 import warnings
-from binascii import unhexlify
 
 import gevent
 import structlog
-from eth_utils import encode_hex, to_canonical_address, to_checksum_address
+from eth_utils import decode_hex, encode_hex, to_canonical_address, to_checksum_address
 from gevent.lock import Semaphore
 from pkg_resources import DistributionNotFound
 from requests import ConnectTimeout
@@ -296,7 +295,7 @@ class JSONRPCClient:
                 dependency_contract = all_contracts[deploy_contract]
 
                 hex_bytecode = solidity_resolve_symbols(dependency_contract['bin'], libraries)
-                bytecode = unhexlify(hex_bytecode)
+                bytecode = decode_hex(hex_bytecode.decode())
 
                 dependency_contract['bin'] = bytecode
 
@@ -320,12 +319,12 @@ class JSONRPCClient:
                     raise RuntimeError('Contract address has no code, check gas usage.')
 
             hex_bytecode = solidity_resolve_symbols(contract['bin'], libraries)
-            bytecode = unhexlify(hex_bytecode)
+            bytecode = decode_hex(hex_bytecode.decode())
 
             contract['bin'] = bytecode
 
         if isinstance(contract['bin'], str):
-            contract['bin'] = unhexlify(contract['bin'])
+            contract['bin'] = decode_hex(contract['bin'].decode())
 
         if not constructor_parameters:
             constructor_parameters = ()
