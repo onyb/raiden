@@ -165,7 +165,7 @@ def geth_generate_poa_genesis(
 
     genesis['extraData'] = geth_clique_extradata(
         random_marker,
-        to_normalized_address(seal_address)[2:],
+        remove_0x_prefix(to_normalized_address(seal_address)),
     )
 
     with open(genesis_path, 'w') as handler:

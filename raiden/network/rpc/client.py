@@ -4,7 +4,13 @@ import warnings
 
 import gevent
 import structlog
-from eth_utils import decode_hex, encode_hex, to_canonical_address, to_checksum_address
+from eth_utils import (
+    decode_hex,
+    encode_hex,
+    remove_0x_prefix,
+    to_canonical_address,
+    to_checksum_address,
+)
 from gevent.lock import Semaphore
 from pkg_resources import DistributionNotFound
 from requests import ConnectTimeout
@@ -309,7 +315,7 @@ class JSONRPCClient:
 
                 contract_address = receipt['contractAddress']
                 # remove the hexadecimal prefix 0x from the address
-                contract_address = contract_address[2:]
+                contract_address = remove_0x_prefix(contract_address)
 
                 libraries[deploy_contract] = contract_address
 
