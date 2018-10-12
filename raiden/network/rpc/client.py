@@ -295,7 +295,7 @@ class JSONRPCClient:
                 dependency_contract = all_contracts[deploy_contract]
 
                 hex_bytecode = solidity_resolve_symbols(dependency_contract['bin'], libraries)
-                bytecode = decode_hex(hex_bytecode.decode())
+                bytecode = decode_hex(hex_bytecode)
 
                 dependency_contract['bin'] = bytecode
 
@@ -319,12 +319,12 @@ class JSONRPCClient:
                     raise RuntimeError('Contract address has no code, check gas usage.')
 
             hex_bytecode = solidity_resolve_symbols(contract['bin'], libraries)
-            bytecode = decode_hex(hex_bytecode.decode())
+            bytecode = decode_hex(hex_bytecode)
 
             contract['bin'] = bytecode
 
         if isinstance(contract['bin'], str):
-            contract['bin'] = decode_hex(contract['bin'].decode())
+            contract['bin'] = decode_hex(contract['bin'])
 
         if not constructor_parameters:
             constructor_parameters = ()
